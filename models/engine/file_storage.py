@@ -54,8 +54,15 @@ class FileStorage():
                 obj_dict = json.load(file)
             from models.base_model import BaseModel
             from models.user import User
+            # add here
+            from models.state import State
+            from models.amenity import Amenity
             for obj in obj_dict:
                 if obj.startswith("BaseModel"):
                     FileStorage.__objects[obj] = BaseModel(**obj_dict[obj])
                 elif obj.startswith("User"):
                     FileStorage.__objects[obj] = User(**obj_dict[obj])
+                elif obj.startswith("State"):
+                    FileStorage.__objects[obj] = State(**obj_dict[obj])
+                elif obj.startswith("Amenity"):
+                    FileStorage.__objects[obj] = Amenity(**obj_dict[obj])

@@ -5,6 +5,8 @@ This module provides a command line interface for the program
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.amenity import Amenity
+from models.state import State
 from models.user import User
 from models.engine.file_storage import FileStorage
 
@@ -15,7 +17,7 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = "(hbnb) "
 
-    CLASSES = ["BaseModel", "User"]
+    CLASSES = ["BaseModel", "User", "State", "Amenity"]
 
     def do_create(self, line):
         """
@@ -33,6 +35,10 @@ class HBNBCommand(cmd.Cmd):
                 base = BaseModel()
             elif args[0] == "User":
                 base = User()
+            elif args[0] == "State":
+                base = State()
+            elif args[0] == "Amenity":
+                base = Amenity()
             print(base.id)
             storage.save()
 
