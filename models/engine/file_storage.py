@@ -57,6 +57,9 @@ class FileStorage():
             # add here
             from models.state import State
             from models.amenity import Amenity
+            from models.place import Place
+            from models.city import City
+            from models.review import Review
             for obj in obj_dict:
                 if obj.startswith("BaseModel"):
                     FileStorage.__objects[obj] = BaseModel(**obj_dict[obj])
@@ -66,3 +69,9 @@ class FileStorage():
                     FileStorage.__objects[obj] = State(**obj_dict[obj])
                 elif obj.startswith("Amenity"):
                     FileStorage.__objects[obj] = Amenity(**obj_dict[obj])
+                elif obj.startswith("Place"):
+                    FileStorage.__objects[obj] = Place(**obj_dict[obj])
+                elif obj.startswith("Review"):
+                    FileStorage.__objects[obj] = Review(**obj_dict[obj])
+                elif obj.startswith("City"):
+                    FileStorage.__objects[obj] = City(**obj_dict[obj])
