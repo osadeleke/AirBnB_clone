@@ -23,17 +23,23 @@ for the AirBnB Project.
             or updated along with any other instance attribute
         """
         if kwargs:
+            # Added the variables because they are compulsory attributes
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
             for arg in kwargs:
                 if arg == "created_at":
                     # changed the variable name from value to va to shorten
                     va = datetime.strptime(kwargs[arg], '%Y-%m-%dT%H:%M:%S.%f')
                     # change effect in settattr
-                    setattr(self, arg, va)
+                    # setattr(self, arg, va)
+                    self.created_at = va
                 elif arg == "updated_at":
                     # changed the variable name from value to va to shorten
                     va = datetime.strptime(kwargs[arg], '%Y-%m-%dT%H:%M:%S.%f')
                     # change effect in settattr
-                    setattr(self, arg, va)
+                    # setattr(self, arg, va)
+                    self.updated_at = va
                 elif arg != "__class__":
                     setattr(self, arg, kwargs[arg])
         else:
@@ -73,6 +79,8 @@ for the AirBnB Project.
         for item in self.__dict__:
             base_dictionary[item] = self.__dict__[item]
         base_dictionary["__class__"] = type(self).__name__
-        base_dictionary["created_at"] = datetime.now().isoformat()
-        base_dictionary["updated_at"] = datetime.now().isoformat()
+        # base_dictionary["created_at"] = datetime.now().isoformat()
+        base_dictionary["created_at"] = self.created_at.isoformat()
+        # base_dictionary["updated_at"] = datetime.now().isoformat()
+        base_dictionary["updated_at"] = self.updated_at.isoformat()
         return base_dictionary
