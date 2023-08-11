@@ -8,6 +8,9 @@ from models.base_model import BaseModel
 from models.amenity import Amenity
 from models.state import State
 from models.user import User
+from models.place import Place
+from models.city import City
+from models.review import Review
 from models.engine.file_storage import FileStorage
 
 
@@ -17,7 +20,7 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = "(hbnb) "
 
-    CLASSES = ["BaseModel", "User", "State", "Amenity"]
+    CLASSES = ["BaseModel", "User", "State", "Amenity", "Place", "City", "Review"]
 
     def do_create(self, line):
         """
@@ -39,6 +42,12 @@ class HBNBCommand(cmd.Cmd):
                 base = State()
             elif args[0] == "Amenity":
                 base = Amenity()
+            elif args[0] == "Place":
+                base = Place()
+            elif args[0] == "City":
+                base = City()
+            elif args[0] == "Review":
+                base = Review()
             print(base.id)
             storage.save()
 
@@ -152,7 +161,6 @@ class HBNBCommand(cmd.Cmd):
                         str_value += " " + arg
                         if arg.endswith('"'):
                             break
-                    print(str_value)
                     setattr(obj, args[2], str(str_value[2:-1]))
                 elif "." in args[3]:
                     setattr(obj, args[2], float(args[3]))
