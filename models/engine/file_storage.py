@@ -3,7 +3,6 @@
 This module defines a class for data
 serialization and deserialization
 """
-
 import json
 from os import path
 
@@ -54,7 +53,6 @@ class FileStorage():
                 obj_dict = json.load(file)
             from models.base_model import BaseModel
             from models.user import User
-            # add here
             from models.state import State
             from models.amenity import Amenity
             from models.place import Place
