@@ -103,6 +103,17 @@ class TestBaseModel(unittest.TestCase):
         check_dict['name'] = tmp_dict.name
         self.assertEqual(tmp_dict.to_dict(), check_dict)
 
+    def test_to_dict_args(self):
+        """Tests to_dict method with args argument on instance call
+        """
+        tmp_dict = BaseModel(10, "something")
+        check_dict = {}
+        check_dict['id'] = tmp_dict.id
+        check_dict['created_at'] = tmp_dict.created_at.isoformat()
+        check_dict['updated_at'] = tmp_dict.updated_at.isoformat()
+        check_dict['__class__'] = type(tmp_dict).__name__
+        self.assertEqual(tmp_dict.to_dict(), check_dict)
+
 
 if __name__ == '__main__':
     unittest.main()

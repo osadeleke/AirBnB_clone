@@ -20,7 +20,10 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = "(hbnb) "
 
-    CLASSES = ["BaseModel", "User", "State", "Amenity", "Place", "City", "Review"]
+    CLASSES = [
+            "BaseModel", "User", "State",
+            "Amenity", "Place", "City", "Review"
+            ]
 
     def do_create(self, line):
         """
