@@ -25,11 +25,12 @@ class HBNBCommand(cmd.Cmd):
             "Amenity", "Place", "City", "Review"
             ]
 
+    def help_create(self):
+        print("Creates a new instance of an object\n")
+
     def do_create(self, line):
         """
         Creates a new instance of an object
-
-        Usage: create <object>
         """
         args = line.split(" ")
         if line == "":
