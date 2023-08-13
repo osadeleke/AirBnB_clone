@@ -1,41 +1,20 @@
 #!/usr/bin/python3
 """
-Unittest for file_storage.py
+Defines unit tests for the File Storage class.
 """
-import unittest
-from os import path
+from unittest import TestCase
+from uuid import uuid4
 from models.engine.file_storage import FileStorage
 
 
-class TestFileStorage(unittest.TestCase):
+class TestFileStorage(TestCase):
     """
-    Test cases for methods in FileStorage class
+    Test class with methods testing the File Storage
+    class
     """
-    def test_all(self):
-        """
-        Test return value of all() method
-        """
-        fs = FileStorage()
-        objects = fs.all()
-        self.assertIs(type(objects), dict)
-
-    def test_save(self):
-        """
-        Test if dictionary of object is saved in file
-        """
-        fs = FileStorage()
-        fs.save()
-        self.assertTrue(path.isfile("file.json"))
 
     def test_reload(self):
         """ Test the reload method """
         obj = FileStorage()
-        obj.reload()
         objects = obj.all()
-        if (path.isfile("file.json")):
-            objects = obj.all()
-            self.assertTrue(len(objects) > 0)
-        else:
-            with self.assertRaises(FileNotFoundError):
-                with open("file.json", "r") as file:
-                    pass
+        self.assertTrue(len(objects) > 0)

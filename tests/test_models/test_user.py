@@ -69,6 +69,16 @@ class TestUser(unittest.TestCase):
         output = "[{}] ({}) {}".format(s_name, s_id, s_dict)
         self.assertEqual(str(tmp_str), output)
 
+    def test_email_attribute(self):
+        """
+        Test class attributes
+        """
+        usr = User()
+        self.assertEqual(usr.email, "")
+        self.assertEqual(usr.password, "")
+        self.assertEqual(usr.first_name, "")
+        self.assertEqual(usr.last_name, "")
+
 
 if __name__ == '__main__':
     unittest.main()

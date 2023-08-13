@@ -16,9 +16,4 @@ class TestAmenity(unittest.TestCase):
         """
         from models.amenity import Amenity
         obj = Amenity()
-        obj.id = "b29b5df5-72e7-43af-8b10-0db51b6d912f"
-        fs = FileStorage()
-        fs.new(obj)
-        objects = fs.all()
-        classname_id = type(obj).__name__ + "." + str(obj.id)
-        self.assertIn(classname_id, objects)
+        self.assertEqual(obj.name, "")

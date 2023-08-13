@@ -16,9 +16,14 @@ class TestPlace(unittest.TestCase):
         """
         from models.place import Place
         obj = Place()
-        obj.id = "b29b5df5-72e7-43af-8b10-0db51b6d912f"
-        fs = FileStorage()
-        fs.new(obj)
-        objects = fs.all()
-        classname_id = type(obj).__name__ + "." + str(obj.id)
-        self.assertIn(classname_id, objects)
+        self.assertEqual(obj.city_id, "")
+        self.assertEqual(obj.user_id, "")
+        self.assertEqual(obj.name, "")
+        self.assertEqual(obj.description, "")
+        self.assertEqual(obj.number_rooms, 0)
+        self.assertEqual(obj.number_bathrooms, 0)
+        self.assertEqual(obj.max_guest, 0)
+        self.assertEqual(obj.price_by_night, 0)
+        self.assertEqual(obj.latitude, 0.0)
+        self.assertEqual(obj.longitude, 0.0)
+        self.assertEqual(obj.amenity_ids, [])

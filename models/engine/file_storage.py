@@ -21,7 +21,7 @@ class FileStorage():
         Return:
             dict: dictionary of objects
         """
-        return FileStorage.__objects
+        return (FileStorage.__objects)
 
     def new(self, obj):
         """
@@ -38,10 +38,10 @@ class FileStorage():
         Saves dictionary of objects to a file
         """
         obj_dict = {}
-        for obj in FileStorage.__objects:
-            obj_dict[obj] = FileStorage.__objects[obj].to_dict()
+        for key, value in FileStorage.__objects.items():
+            obj_dict[key] = value.to_dict()
         with open(FileStorage.__file_path, mode="w") as file:
-            json.dump(obj_dict, file)
+            file.write(json.dumps(obj_dict))
 
     def reload(self):
         """
@@ -50,7 +50,7 @@ class FileStorage():
         if path.isfile(FileStorage.__file_path):
             obj_dict = {}
             with open(FileStorage.__file_path, mode="r") as file:
-                obj_dict = json.load(file)
+                obj_dict = json.loads(file.read())
             from models.base_model import BaseModel
             from models.user import User
             from models.state import State
@@ -58,18 +58,7 @@ class FileStorage():
             from models.place import Place
             from models.city import City
             from models.review import Review
-            for obj in obj_dict:
-                if obj.startswith("BaseModel"):
-                    FileStorage.__objects[obj] = BaseModel(**obj_dict[obj])
-                elif obj.startswith("User"):
-                    FileStorage.__objects[obj] = User(**obj_dict[obj])
-                elif obj.startswith("State"):
-                    FileStorage.__objects[obj] = State(**obj_dict[obj])
-                elif obj.startswith("Amenity"):
-                    FileStorage.__objects[obj] = Amenity(**obj_dict[obj])
-                elif obj.startswith("Place"):
-                    FileStorage.__objects[obj] = Place(**obj_dict[obj])
-                elif obj.startswith("Review"):
-                    FileStorage.__objects[obj] = Review(**obj_dict[obj])
-                elif obj.startswith("City"):
-                    FileStorage.__objects[obj] = City(**obj_dict[obj])
+            for key, value in obj_dict.items():
+                class_name = value["__class__"]
+                del value["__class__"]
+                FileStorage.__objects[key] = eval(class_name + "(**value)")

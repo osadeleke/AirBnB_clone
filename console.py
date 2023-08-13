@@ -69,6 +69,8 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) < 2:
             print("** instance id missing **")
         else:
+            args[1] = args[1].replace('"', '') \
+                    if args[1][0] == '"' else args[1]
             classname_id = args[0] + "." + args[1]
             if classname_id not in objs.keys():
                 print("** no instance found **")
@@ -82,18 +84,16 @@ class HBNBCommand(cmd.Cmd):
         Usage: destroy <object> <id>
         """
         objs = storage.all()
-        objs_list = []
-        for key in objs.keys():
-            if (key.split(".")[0] not in objs_list):
-                objs_list.append(key.split(".")[0])
         args = line.split(" ")
         if line == "":
             print("** class name missing **")
-        elif args[0] not in objs_list:
+        elif args[0] not in HBNBCommand.CLASSES:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
         else:
+            args[1] = args[1].replace('"', '') \
+                    if args[1][0] == '"' else args[1]
             classname_id = args[0] + "." + args[1]
             if classname_id not in objs.keys():
                 print("** no instance found **")
@@ -108,13 +108,9 @@ class HBNBCommand(cmd.Cmd):
         Usage: all <object> | all
         """
         objs = storage.all()
-        objs_list = []
-        for key in objs.keys():
-            if (key.split(".")[0] not in objs_list):
-                objs_list.append(key.split(".")[0])
         args = line.split(" ")
         if args[0] != "":
-            if args[0] not in objs_list:
+            if args[0] not in HBNBCommand.CLASSES:
                 print("** class doesn't exist **")
             else:
                 all_list = []
@@ -135,18 +131,16 @@ class HBNBCommand(cmd.Cmd):
         Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
         objs = storage.all()
-        objs_list = []
-        for key in objs.keys():
-            if (key.split(".")[0] not in objs_list):
-                objs_list.append(key.split(".")[0])
         args = line.split(" ")
         if line == "":
             print("** class name missing **")
-        elif args[0] not in objs_list:
+        elif args[0] not in HBNBCommand.CLASSES:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
         else:
+            args[1] = args[1].replace('"', '') \
+                    if args[1][0] == '"' else args[1]
             classname_id = args[0] + "." + args[1]
             if classname_id not in objs.keys():
                 print("** no instance found **")
@@ -155,6 +149,8 @@ class HBNBCommand(cmd.Cmd):
             elif len(args) < 4:
                 print("** value missing **")
             else:
+                args[2] = args[2].replace('"', '') \
+                        if args[2][0] == '"' else args[2]
                 obj = objs[classname_id]
                 if args[3].startswith('"') and args[3].endswith('"'):
                     setattr(obj, args[2], str(args[3][1:-1]))
@@ -170,6 +166,32 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     setattr(obj, args[2], int(args[3]))
                 storage.save()
+
+    def do_count(self, line):
+        """
+        Count the number of objects
+        """
+        objs = storage.all()
+        args = line.split(" ")
+        obj_names = list(map(lambda obj: type(obj).__name__, objs.values()))
+        print("{}".format(obj_names.count(line)))
+
+    def default(self, line):
+        """
+        Handle other commands like:
+            <class name>.all()
+            <class name>.count()
+        """
+        METHODS = ["all", "count", "show", "destroy", "update"]
+
+        if "." in line:
+            command = line[:-1].replace(",", "")\
+                    .replace("(", " ").replace(".", " ").split(" ")
+            command[0], command[1] = command[1], command[0]
+            if command[1] in HBNBCommand.CLASSES and command[0] in METHODS:
+                self.onecmd(" ".join(command))
+                return None
+        return cmd.Cmd.default(self, line)
 
     def do_EOF(self, line):
         """
