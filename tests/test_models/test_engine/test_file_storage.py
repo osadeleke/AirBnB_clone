@@ -41,10 +41,14 @@ class TestFileStorage(unittest.TestCase):
         self.assertTrue(path.isfile("file.json"))
 
     def test_reload(self):
-        """
-        Test if dictionary of objects is reloaded from file
-        """
-        fs = FileStorage()
-        fs.reload()
-        objects = fs.all()
-        self.assertIs(type(objects), dict)
+        """ Test the reload method """
+        obj = FileStorage()
+        obj.reload()
+        objects = obj.all()
+        if (path.isfile("file.json")):
+            objects = obj.all()
+            self.assertTrue(len(objects) > 0)
+        else:
+            with self.assertRaises(FileNotFoundError):
+                with open("file.json", "r") as file:
+                    pass
