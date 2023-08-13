@@ -3,6 +3,7 @@
 Unittest for file_storage.py
 """
 import unittest
+from os import path
 from models.engine.file_storage import FileStorage
 
 
@@ -30,3 +31,20 @@ class TestFileStorage(unittest.TestCase):
         objects = fs.all()
         classname_id = type(bs).__name__ + "." + str(bs.id)
         self.assertIn(classname_id, objects)
+
+    def test_save(self):
+        """
+        Test if dictionary of object is saved in file
+        """
+        fs = FileStorage()
+        fs.save()
+        self.assertTrue(path.isfile("file.json"))
+
+    def test_reload(self):
+        """
+        Test if dictionary of objects is reloaded from file
+        """
+        fs = FileStorage()
+        fs.reload()
+        objects = fs.all()
+        self.assertIs(type(objects), dict)
