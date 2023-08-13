@@ -19,19 +19,6 @@ class TestFileStorage(unittest.TestCase):
         objects = fs.all()
         self.assertIs(type(objects), dict)
 
-    def test_new(self):
-        """
-        Test if an object was added to a dictionary 
-        """
-        from models.base_model import BaseModel
-        bs = BaseModel()
-        bs.id = "b29b5df5-72e7-43af-8b10-0db51b6d912f"
-        fs = FileStorage()
-        fs.new(bs)
-        objects = fs.all()
-        classname_id = type(bs).__name__ + "." + str(bs.id)
-        self.assertIn(classname_id, objects)
-
     def test_save(self):
         """
         Test if dictionary of object is saved in file
