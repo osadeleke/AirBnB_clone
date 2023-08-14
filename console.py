@@ -149,8 +149,7 @@ class HBNBCommand(cmd.Cmd):
             elif len(args) < 4:
                 print("** value missing **")
             else:
-                args[2] = args[2].replace('"', '') \
-                        if args[2][0] == '"' else args[2]
+                args[2] = args[2].replace('"', '').replace("'", "")
                 obj = objs[classname_id]
                 if args[3].startswith('"') and args[3].endswith('"'):
                     setattr(obj, args[2], str(args[3][1:-1]))
@@ -185,11 +184,18 @@ class HBNBCommand(cmd.Cmd):
         METHODS = ["all", "count", "show", "destroy", "update"]
 
         if "." in line:
-            command = line[:-1].replace(",", "")\
+            command = line[:-1].replace(",", "").replace(":", "")\
+                    .replace("{", "").replace("}", "")\
                     .replace("(", " ").replace(".", " ").split(" ")
             command[0], command[1] = command[1], command[0]
             if command[1] in HBNBCommand.CLASSES and command[0] in METHODS:
-                self.onecmd(" ".join(command))
+                if command[0] == "update" and len(command) > 5:
+                    while len(command) >= 5:
+                        self.onecmd(" ".join(command[:5]))
+                        command.pop(3)
+                        command.pop(3)
+                else:
+                    self.onecmd(" ".join(command))
                 return None
         return cmd.Cmd.default(self, line)
 
