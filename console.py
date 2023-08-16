@@ -151,13 +151,15 @@ class HBNBCommand(cmd.Cmd):
             else:
                 args[2] = args[2].replace('"', '').replace("'", "")
                 obj = objs[classname_id]
-                if args[3].startswith('"') and args[3].endswith('"'):
+                if args[3].startswith('"') and args[3].endswith('"') or \
+                        args[3].startswith("'") and args[3].endswith("'"):
                     setattr(obj, args[2], str(args[3][1:-1]))
-                elif args[3].startswith('"') and not args[3].endswith('"'):
+                elif args[3].startswith('"') and not args[3].endswith('"') or \
+                        args[3].startswith("'") and not args[3].endswith("'"):
                     str_value = ""
                     for arg in args[3:]:
                         str_value += " " + arg
-                        if arg.endswith('"'):
+                        if arg.endswith('"') or arg.endswith("'"):
                             break
                     setattr(obj, args[2], str(str_value[2:-1]))
                 elif "." in args[3]:
@@ -175,6 +177,12 @@ class HBNBCommand(cmd.Cmd):
         obj_names = list(map(lambda obj: type(obj).__name__, objs.values()))
         print("{}".format(obj_names.count(line)))
 
+    def update_dict(self, command, line):
+        attr = line.split("{")[1][0:-2].replace(":", "").split(", ")
+        for item in attr:
+            comm = command + " " + item
+            self.onecmd(comm)
+
     def default(self, line):
         """
         Handle other commands like:
@@ -184,18 +192,14 @@ class HBNBCommand(cmd.Cmd):
         METHODS = ["all", "count", "show", "destroy", "update"]
 
         if "." in line:
-            command = line[:-1].replace(",", "").replace(":", "")\
-                    .replace("{", "").replace("}", "")\
+            command = line[:-1].replace(",", "")\
                     .replace("(", " ").replace(".", " ").split(" ")
             command[0], command[1] = command[1], command[0]
             if command[1] in HBNBCommand.CLASSES and command[0] in METHODS:
-                if command[0] == "update" and len(command) > 5:
-                    while len(command) >= 5:
-                        self.onecmd(" ".join(command[:5]))
-                        command.pop(3)
-                        command.pop(3)
-                else:
-                    self.onecmd(" ".join(command))
+                if command[0] == "update" and "{" in line:
+                    self.update_dict(" ".join(command[:3]), line)
+                    return None
+                self.onecmd(" ".join(command))
                 return None
         return cmd.Cmd.default(self, line)
 
