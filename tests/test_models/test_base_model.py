@@ -72,12 +72,11 @@ class TestBaseModel(unittest.TestCase):
     def test_save(self):
         """Tests the save method
         """
-        tmp = BaseModel()
-        up_time = tmp.updated_at
-        tmp.save()
-        nw_time = tmp.updated_at
-        self.assertNotEqual(up_time, nw_time)
-        self.assertIsInstance(nw_time, datetime)
+        obj = BaseModel()
+        first_update = obj.updated_at
+        obj.save()
+        second_update = obj.updated_at
+        self.assertLess(first_update, second_update, "Error")
 
     def test_to_dict(self):
         """Tests to_dict method with empty argument on instance call
